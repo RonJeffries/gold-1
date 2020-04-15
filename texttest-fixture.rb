@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 
-require File.join(File.dirname(__FILE__), 'gilded_rose')
+require File.join(File.dirname(__FILE__), 'gilded-rose')
 
 puts "OMGHAI!"
 items = [

@@ -1,5 +1,4 @@
 require "./gilded-rose"
-#require File.join(File.dirname(__FILE__), 'gilded-rose')
 require "minitest/autorun"
 
 class TestGildedRose<Minitest::Test
