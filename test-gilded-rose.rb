@@ -4,7 +4,6 @@ require "minitest/autorun"
 class TestGildedRose<Minitest::Test
   
   def test_hookup
-    # print File.join(File.dirname(__FILE__), 'gilded-rose')
     assert true
   end
 
