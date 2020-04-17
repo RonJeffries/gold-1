@@ -4,7 +4,20 @@ class GildedRose
     @items = items
   end
 
+  def match_name(item,name)
+    return item.name.downcase.include? name.downcase
+  end
+
+  def update_conjured_item(item)
+    item.sell_in = [0,item.sell_in-1].max
+    item.quality = [0,item.quality - 2].max
+  end
+
   def update_item(item)
+    if (match_name(item,"conjured"))
+      update_conjured_item(item)
+      return
+    end
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
