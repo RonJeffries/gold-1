@@ -13,6 +13,9 @@ Backstage passes to a TAFKAL80ETC concert, 15, 20
 Backstage passes to a TAFKAL80ETC concert, 10, 49
 Backstage passes to a TAFKAL80ETC concert, 5, 49
 Conjured Mana Cake, 3, 6
+Conjured Voodoo Doll, 0, 1
++1 Sword: Assbiter, 0, 20
+conjured double dipper, 0, 10
 
 -------- day 1 --------
 name, sellIn, quality
@@ -25,6 +28,9 @@ Backstage passes to a TAFKAL80ETC concert, 14, 21
 Backstage passes to a TAFKAL80ETC concert, 9, 50
 Backstage passes to a TAFKAL80ETC concert, 4, 50
 Conjured Mana Cake, 2, 4
+Conjured Voodoo Doll, -1, 0
++1 Sword: Assbiter, -1, 18
+conjured double dipper, -1, 6
 
 "
 
@@ -38,7 +44,10 @@ items = [
   Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49),
   Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49),
   # This Conjured item does not work properly yet
-  Item.new(name="Conjured Mana Cake", sell_in=3, quality=6), # <-- :O
+  Item.new(name="Conjured Mana Cake", sell_in=3, quality=6),
+  Item.new(name="Conjured Voodoo Doll", sell_in=0, quality=1),
+  Item.new(name="+1 Sword: Assbiter", sell_in=0, quality=20),
+  Item.new(name="conjured double dipper", sell_in=0, quality = 10)
 ]
 
 days = 2
@@ -59,3 +68,6 @@ gilded_rose = GildedRose.new items
 end
 
 puts actual.string == expected
+if actual.string != expected
+  puts actual.string
+end

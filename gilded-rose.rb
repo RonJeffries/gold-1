@@ -9,8 +9,13 @@ class GildedRose
   end
 
   def update_conjured_item(item)
-    item.sell_in = [0,item.sell_in-1].max
-    item.quality = [0,item.quality - 2].max
+    item.sell_in = item.sell_in - 1
+    normal_degradation = 1
+    if item.sell_in < 0
+      normal_degradation = 2*normal_degradation
+    end
+    conjured_degradation = 2*normal_degradation
+    item.quality = [0,item.quality - conjured_degradation].max
   end
 
   def update_item(item)
@@ -21,7 +26,7 @@ class GildedRose
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
+            item.quality = item.quality - 1 #1 for sword
           end
         end
       else
