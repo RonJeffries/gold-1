@@ -8,14 +8,17 @@ class GildedRose
     return item.name.downcase.include? name.downcase
   end
 
-  def update_conjured_item(item)
-    item.sell_in = item.sell_in - 1
+  def conjured_degradation(item)
     normal_degradation = 1
     if item.sell_in < 0
       normal_degradation = 2*normal_degradation
     end
     conjured_degradation = 2*normal_degradation
-    item.quality = [0,item.quality - conjured_degradation].max
+  end
+
+  def update_conjured_item(item)
+    item.sell_in = item.sell_in - 1
+    item.quality = [0,item.quality - conjured_degradation(item)].max
   end
 
   def update_item(item)
@@ -50,22 +53,20 @@ class GildedRose
         item.sell_in = item.sell_in - 1
       end
       if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else # if item.name == "Backstage passes ..."
-            item.quality = item.quality - item.quality # approx zero
-          end
-        else # if item.name == "Aged Brie"
+        if item.name == "Aged Brie"
           if item.quality < 50
             item.quality = item.quality + 1
           end
+        elsif item.name == "Backstage passes to a TAFKAL80ETC concert"
+          item.quality = 0
+        else
+          if item.quality > 0
+            if item.name != "Sulfuras, Hand of Ragnaros"
+              item.quality = item.quality - 1
+            end
+          end
         end
-      end    
+      end  
   end
 
   def update_quality()
