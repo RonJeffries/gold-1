@@ -13,6 +13,9 @@ class GildedRose
   end
 
   def appropriateWrapperClass(item)
+    if match_name(item, "conjured")
+      return ConjuredWrapper
+    end
     return OriginalWrapper
   end
 
