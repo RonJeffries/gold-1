@@ -1,3 +1,5 @@
+#test-gided-rose.rb
+
 require "./gilded-rose"
 require "minitest/autorun"
 
