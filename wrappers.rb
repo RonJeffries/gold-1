@@ -35,33 +35,19 @@ class OriginalWrapper
           item.quality = item.quality - 1 #1 for sword
         end
       end
-    else
-      if item.quality < 50
-        item.quality = item.quality + 1
-        if item.name == "Backstage passes to a TAFKAL80ETC concert"
-          if item.sell_in < 11
-            if item.quality < 50
-              item.quality = item.quality + 1
-            end
-          end
-          if item.sell_in < 6
-            if item.quality < 50
-              item.quality = item.quality + 1
-            end
-          end
-        end
-      end
+    elsif brie?(item)
+      update_brie(item)
+    elsif tickets?(item)
+      update_ticket(item)
     end
     if item.name != "Sulfuras, Hand of Ragnaros"
       item.sell_in = item.sell_in - 1
     end
-    if item.sell_in < 0
-      if item.name == "Aged Brie"
-        if item.quality < 50
-          item.quality = item.quality + 1
-        end
-      elsif item.name == "Backstage passes to a TAFKAL80ETC concert"
-        item.quality = 0
+    if expired?(item)
+      if brie?(item)
+        increment_quality_up_to_50(item)
+      elsif tickets?(item)
+        set_quality_zero(item)
       else
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
@@ -70,6 +56,40 @@ class OriginalWrapper
         end
       end
     end 
+  end
+
+  def update_brie(item)
+    increment_quality_up_to_50(item)
+  end
+
+  def update_ticket(item)
+    increment_quality_up_to_50(item)
+    if item.sell_in < 11
+      increment_quality_up_to_50(item)
+    end
+    if item.sell_in < 6
+      increment_quality_up_to_50(item)
+    end
+  end
+
+  def tickets?(item)
+    item.name == "Backstage passes to a TAFKAL80ETC concert"
+  end
+
+  def brie?(item)
+    item.name == "Aged Brie"
+  end
+
+  def set_quality_zero(item)
+    item.quality = 0
+  end
+
+  def expired?(item)
+    item.sell_in < 0
+  end
+
+  def increment_quality_up_to_50(item)
+      item.quality += 1 unless item.quality >= 50
   end
 
 end

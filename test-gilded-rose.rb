@@ -36,4 +36,13 @@ class TestGildedRose<Minitest::Test
     assert_equal(6, item.quality)
   end
 
+  def test_brie_quality_increases_to_50
+    gr = GildedRose.new([])
+    brie = Item.new("Aged Brie", sell_in=0, quality=49)
+    gr.update_item(brie)
+    assert_equal(50, brie.quality)
+    gr.update_item(brie)
+    assert_equal(50, brie.quality)
+  end
+
 end
