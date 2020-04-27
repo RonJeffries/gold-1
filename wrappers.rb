@@ -15,9 +15,8 @@ class ConjuredWrapper
   end
 
   def update
-    item = @item
-    item.sell_in = item.sell_in - 1
-    item.quality = [0,item.quality - conjured_degradation].max
+    @item.sell_in = @item.sell_in - 1
+    @item.quality = [0,@item.quality - conjured_degradation].max
   end
 
 end
@@ -28,72 +27,69 @@ class OriginalWrapper
   end
 
   def update
-    item = @item
-    if !brie?(item) and !tickets?(item)
-      if item.quality > 0
-        if !sulfuras?(item)
-          item.quality = item.quality - 1 #1 for sword
-        end
-      end
-    elsif brie?(item)
-      update_brie(item)
-    elsif tickets?(item)
-      update_ticket(item)
+    return if sulfuras?
+    if brie?
+      update_brie
+    elsif tickets?
+      update_ticket
+    else
+      decrement_quality_down_to_zero
     end
-    if !sulfuras?(item)
-      item.sell_in = item.sell_in - 1
-    end
-    if expired?(item)
-      if brie?(item)
-        increment_quality_up_to_50(item)
-      elsif tickets?(item)
-        set_quality_zero(item)
-      else
-        if item.quality > 0
-          if !sulfuras?(item)
-            item.quality = item.quality - 1
-          end
-        end
-      end
-    end 
+    @item.sell_in = @item.sell_in - 1
+    handle_expired_items
   end
 
-  def sulfuras?(item)
-    item.name == "Sulfuras, Hand of Ragnaros"
-  end
-
-  def update_brie(item)
-    increment_quality_up_to_50(item)
-  end
-
-  def update_ticket(item)
-    increment_quality_up_to_50(item)
-    if item.sell_in < 11
-      increment_quality_up_to_50(item)
-    end
-    if item.sell_in < 6
-      increment_quality_up_to_50(item)
+  def handle_expired_items
+    return if ! expired?
+    if brie?
+      increment_quality_up_to_50
+    elsif tickets?
+      set_quality_zero
+    else
+      decrement_quality_down_to_zero
     end
   end
 
-  def tickets?(item)
-    item.name == "Backstage passes to a TAFKAL80ETC concert"
+  def decrement_quality_down_to_zero
+    @item.quality = @item.quality - 1 if @item.quality > 0
   end
 
-  def brie?(item)
-    item.name == "Aged Brie"
+  def sulfuras?
+    @item.name == "Sulfuras, Hand of Ragnaros"
   end
 
-  def set_quality_zero(item)
-    item.quality = 0
+  def update_brie
+    increment_quality_up_to_50
   end
 
-  def expired?(item)
-    item.sell_in < 0
+  def update_ticket
+    increment_quality_up_to_50
+    if @item.sell_in < 11
+      increment_quality_up_to_50
+    end
+    if @item.sell_in < 6
+      increment_quality_up_to_50
+    end
   end
 
-  def increment_quality_up_to_50(item)
-      item.quality += 1 unless item.quality >= 50
+  def tickets?
+    @item.name == "Backstage passes to a TAFKAL80ETC concert"
+  end
+
+  def brie?
+    @item.name == "Aged Brie"
+  end
+
+  def set_quality_zero
+    @item.quality = 0
+  end
+
+  def expired?
+    @item.sell_in < 0
+  end
+
+  def increment_quality_up_to_50
+      @item.quality += 1 unless @item.quality >= 50
   end
 
 end
