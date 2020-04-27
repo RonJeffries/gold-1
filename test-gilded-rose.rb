@@ -47,6 +47,13 @@ class TestGildedRose<Minitest::Test
     assert_equal(50, brie.quality)
   end
 
+  def test_past_due_brie_increases_by_1
+    gr = GildedRose.new([])
+    brie = Item.new("Aged Brie", sell_in=0, quality=40)
+    gr.update_item(brie)
+    assert_equal(41, brie.quality)
+  end
+
   def test_text
     expected = "-------- day 0 --------
 name, sellIn, quality
