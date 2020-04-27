@@ -31,7 +31,7 @@ class OriginalWrapper
     item = @item
     if !brie?(item) and !tickets?(item)
       if item.quality > 0
-        if item.name != "Sulfuras, Hand of Ragnaros"
+        if !sulfuras?(item)
           item.quality = item.quality - 1 #1 for sword
         end
       end
@@ -40,7 +40,7 @@ class OriginalWrapper
     elsif tickets?(item)
       update_ticket(item)
     end
-    if item.name != "Sulfuras, Hand of Ragnaros"
+    if !sulfuras?(item)
       item.sell_in = item.sell_in - 1
     end
     if expired?(item)
@@ -50,12 +50,16 @@ class OriginalWrapper
         set_quality_zero(item)
       else
         if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
+          if !sulfuras?(item)
             item.quality = item.quality - 1
           end
         end
       end
     end 
+  end
+
+  def sulfuras?(item)
+    item.name == "Sulfuras, Hand of Ragnaros"
   end
 
   def update_brie(item)
