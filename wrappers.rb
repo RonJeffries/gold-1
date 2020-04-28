@@ -28,25 +28,14 @@ class OriginalWrapper
 
   def update
     return if sulfuras?
+    @item.sell_in = @item.sell_in - 1
     if brie?
       update_brie
     elsif tickets?
       update_ticket
     else
       decrement_quality_down_to_zero
-    end
-    @item.sell_in = @item.sell_in - 1
-    handle_expired_items
-  end
-
-  def handle_expired_items
-    return if ! expired?
-    if brie?
-      increment_quality_up_to_50
-    elsif tickets?
-      set_quality_zero
-    else
-      decrement_quality_down_to_zero
+      decrement_quality_down_to_zero if expired?
     end
   end
 
@@ -60,16 +49,18 @@ class OriginalWrapper
 
   def update_brie
     increment_quality_up_to_50
+    increment_quality_up_to_50 if expired?
   end
 
   def update_ticket
     increment_quality_up_to_50
-    if @item.sell_in < 11
+    if @item.sell_in < 10
       increment_quality_up_to_50
     end
-    if @item.sell_in < 6
+    if @item.sell_in < 5
       increment_quality_up_to_50
     end
+    set_quality_zero if expired?
   end
 
   def tickets?

@@ -51,7 +51,29 @@ class TestGildedRose<Minitest::Test
     gr = GildedRose.new([])
     brie = Item.new("Aged Brie", sell_in=0, quality=40)
     gr.update_item(brie)
-    assert_equal(41, brie.quality)
+    assert_equal(42, brie.quality)
+  end
+
+  def test_ticket_does_not_increase_on_day_10_but_after_10
+    gr = GildedRose.new([])
+    tick = Item.new("Backstage passes to a TAFKAL80ETC concert", sell_in=11, quality=40)
+    gr.update_item(tick)
+    assert_equal(10, tick.sell_in)
+    assert_equal(41, tick.quality)
+    gr.update_item(tick)
+    assert_equal( 9, tick.sell_in)
+    assert_equal(43, tick.quality)
+  end
+
+  def test_ticket_does_not_increase_on_day_5_but_after_5
+    gr = GildedRose.new([])
+    tick = Item.new("Backstage passes to a TAFKAL80ETC concert", sell_in=6, quality=40)
+    gr.update_item(tick)
+    assert_equal(5, tick.sell_in)
+    assert_equal(42, tick.quality)
+    gr.update_item(tick)
+    assert_equal( 4, tick.sell_in)
+    assert_equal(45, tick.quality)
   end
 
   def test_text
