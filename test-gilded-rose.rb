@@ -143,9 +143,5 @@ conjured double dipper, -1, 6
     end
 
     assert_equal(expected, actual.string)
-    # if actual.string != expected
-    #   puts actual.string
-    # end
   end
-
 end

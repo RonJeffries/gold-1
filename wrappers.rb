@@ -1,55 +1,56 @@
 # wrapper classes
 
-class ConjuredWrapper
-  def initialize(item)
-    @item = item
-  end
-
-  def conjured_degradation
-    normal_degradation = 1
-    if @item.sell_in < 0
-      normal_degradation = 2*normal_degradation
-    end
-    conjured_degradation = 2*normal_degradation
-    return conjured_degradation
-  end
-
-  def update
-    @item.sell_in = @item.sell_in - 1
-    @item.quality = [0,@item.quality - conjured_degradation].max
-  end
-
-end
-
 class OriginalWrapper
+
+  NormalDegradation = 1
+
   def initialize(item)
     @item = item
   end
 
   def update
     return if sulfuras?
-    @item.sell_in = @item.sell_in - 1
-    if brie?
-      update_brie
-    elsif tickets?
-      update_ticket
-    else
-      decrement_quality_down_to_zero
-      decrement_quality_down_to_zero if expired?
+    decrement_sell_in
+    case
+      when brie?     then update_brie
+      when ticket?  then update_ticket
+      when conjured? then update_conjured
+      else update_normal
     end
   end
 
-  def decrement_quality_down_to_zero
-    @item.quality = @item.quality - 1 if @item.quality > 0
+  def update_normal
+    decrement_quality_down_to_zero(NormalDegradation)
+    decrement_quality_down_to_zero(NormalDegradation) if expired?
+  end
+
+  def brie?
+    @item.name == "Aged Brie"
+  end
+
+  def update_brie
+    increment_quality_up_to_50
+    increment_quality_up_to_50 if expired?
+  end
+
+  def conjured?
+    return @item.name.downcase.include? 'conjured'
+  end
+
+  def update_conjured
+    double_degrade = 2*NormalDegradation
+    decrement_quality_down_to_zero(double_degrade)
+    decrement_quality_down_to_zero(double_degrade) if expired?
   end
 
   def sulfuras?
     @item.name == "Sulfuras, Hand of Ragnaros"
   end
 
-  def update_brie
-    increment_quality_up_to_50
-    increment_quality_up_to_50 if expired?
+  ## sulfurus does not update
+
+  def ticket?
+    @item.name == "Backstage passes to a TAFKAL80ETC concert"
   end
 
   def update_ticket
@@ -63,16 +64,15 @@ class OriginalWrapper
     set_quality_zero if expired?
   end
 
-  def tickets?
-    @item.name == "Backstage passes to a TAFKAL80ETC concert"
+  ## utility methods
+
+  def decrement_quality_down_to_zero(increment)
+    @item.quality -= increment
+    @item.quality = 0 if @item.quality < 0
   end
 
-  def brie?
-    @item.name == "Aged Brie"
-  end
-
-  def set_quality_zero
-    @item.quality = 0
+  def decrement_sell_in
+    @item.sell_in -= 1
   end
 
   def expired?
@@ -83,4 +83,7 @@ class OriginalWrapper
       @item.quality += 1 unless @item.quality >= 50
   end
 
+  def set_quality_zero
+    @item.quality = 0
+  end
 end

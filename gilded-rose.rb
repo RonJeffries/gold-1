@@ -12,15 +12,8 @@ class GildedRose
     return item.name.downcase.include? name.downcase
   end
 
-  def appropriate_wrapper_class(item)
-    return ConjuredWrapper if match_name(item, "conjured")
-    return OriginalWrapper
-  end
-
   def update_item(item)
-    wrapper_class = appropriate_wrapper_class(item)
-    wrapped_item = wrapper_class.new(item)
-    wrapped_item.update
+    OriginalWrapper.new(item).update
   end
 
   def update_quality()
