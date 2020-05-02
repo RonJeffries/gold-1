@@ -13,7 +13,7 @@ class OriginalWrapper
     decrement_sell_in
     case
       when brie?     then update_brie
-      when ticket?  then update_ticket
+      when ticket?   then update_ticket
       when conjured? then update_conjured
       else update_normal
     end
